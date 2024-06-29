@@ -5,21 +5,32 @@ import requests
 import sys
 
 if __name__ == "__main__":
-    employee_id = sys.argv[1]
-    url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
+    # Get the employee ID from the command-line argument
+    user_id = sys.argv[1]
 
-    todo = "https://jsponplaceholder.typicode.com/todo?userId={}"
-    todo = todo.format(employee_id)
+    # Base URL for the JSONPlaceholder API
+    url = "https://jsonplaceholder.typicode.com/"
 
-    user_info = requests.request("GET", url).json()
-    todo_info = requests.request("GET", todo).json()
+    # Fetch user information using the provided employee ID
+    user = requests.get(url + "users/{}".format(user_id)).json()
+    username = user.get("username")
 
-    employee_username = user_info.get("username")
+    # Fetch the to-do list for the employee using the provided employee ID
+    params = {"userId": user_id}
+    todos = requests.get(url + "todos", params).json()
 
-    todos_info_sorted = [
-        dict(zip(["task", "completed", "username"],
-                  [task["title"], task["completed", employee_username]]))
-                  for task in todo_info]
-    user_dict = {str(employee_id): todos_info_sorted}
-    with open(str(employee_id) + 'json', "w") as f:
-              f.write(json.dumps(user_dict))
+    # Create a dictionary containing the user and to-do list information
+    data_to_export = {
+        user_id: [
+            {
+                "task": t.get("title"),
+                "completed": t.get("completed"),
+                "username": username
+            }
+            for t in todos
+        ]
+    }
+
+    # Write the data to a JSON file with the employee ID as the filename
+    with open("{}.json".format(user_id), "w") as jsonfile:
+        json.dump(data_to_export, jsonfile, indent=4)
