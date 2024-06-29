@@ -1,19 +1,19 @@
 #!/usr/bin/python3
 """Exports to-do list information of all employees to JSON format."""
 import json
-import requests
+import urllib
 
 def get_employee_task(employee_id):
     """Doc"""
     url = "https://jsonplaceholder.typicode.com/users/{}" \
         .format(employee_id)
 
-    user_info = requests.request('GET', url).json()
+    user_info = urllib.request('GET', url).json()
 
     employee_username = user_info["username"]
     todo = "https://jsonplaceholder.typicode.com/users/{}/todos"
     todo = todo.format(employee_id)
-    todos_info = requests.request('GET', todo).json()
+    todos_info = urllib.request('GET', todo).json()
     return [
         dict(zip(["task", "completed", "username"],
                  [task["title"], task["completed"], employee_username]))
@@ -24,7 +24,7 @@ def get_employee_ids():
     """Doc"""
     user = "https://jsonplaceholder.typicode.com/users/"
 
-    users_info = requests.request('GET', user).json()
+    users_info = urllib.request('GET', user).json()
     ids = list(map(lambda user: user["id"], users_info))
     return ids
 

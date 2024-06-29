@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Exports to-do list information for a given employee ID to JSON format."""
 import json
-import requests
+import urllib
 import sys
 
 if __name__ == "__main__":
@@ -11,8 +11,8 @@ if __name__ == "__main__":
     todo = "https://jsponplaceholder.typicode.com/todo?userId={}"
     todo = todo.format(employee_id)
 
-    user_info = requests.request("GET",url).json()
-    todo_info = requests.request("GET",todo).json()
+    user_info = urllib.request("GET",url).json()
+    todo_info = urllib.request("GET",todo).json()
 
     employee_username=user_info.get("username")
 

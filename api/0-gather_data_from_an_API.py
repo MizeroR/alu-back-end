@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import requests
+import urllib
 import sys
 
 if __name__ == "__main__":
@@ -10,8 +10,8 @@ if __name__ == "__main__":
     todo = "https://jsonplaceholder.typicode.com/todos?userId/{}"
     todo = todo.format(employee_id)
 
-    user_info = requests.request("GET",url).json()
-    todo_info = requests.request("GET", todo).json()
+    user_info = urllib.request("GET",url).json()
+    todo_info = urllib.request("GET", todo).json()
 
     employee_name = user_info.get("name")
     total_tasks =  list(filter(lambda x:(x["completed"] is True), todo_info))
