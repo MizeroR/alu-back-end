@@ -9,11 +9,12 @@ def get_employee_task(employee_id):
         .format(employee_id)
 
     user_info = urllib.request('GET', url).json()
-
+    todos_info = urllib.request('GET', todo).json()
+    
     employee_username = user_info["username"]
     todo = "https://jsonplaceholder.typicode.com/users/{}/todos"
     todo = todo.format(employee_id)
-    todos_info = urllib.request('GET', todo).json()
+    
     return [
         dict(zip(["task", "completed", "username"],
                  [task["title"], task["completed"], employee_username]))
