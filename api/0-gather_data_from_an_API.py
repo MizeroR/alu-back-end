@@ -1,47 +1,27 @@
 #!/usr/bin/python3
-"""
-Python script that returns TODO list progress for a given employee ID
-"""
+"""gathering all data"""
 import requests
-from sys import argv
-
-
-def get_employee_info(employee_id):
-    url = f'https://jsonplaceholder.typicode.com/users/{employee_id}/'
-    response = requests.get(url)
-    return response.json()
-
-
-def get_employee_todos(employee_id):
-
-    url = f'https://jsonplaceholder.typicode.com/users/{employee_id}/todos'
-    response = requests.get(url)
-    return response.json()
-
-
-def main(employee_id):
-    """
-    Main function to fetch and display the TODO list progress of the employee
-    """
-    employee = get_employee_info(employee_id)
-    employee_name = employee.get("name")
-
-    emp_todos = get_employee_todos(employee_id)
-    tasks = {todo.get("title"): todo.get("completed") for todo in emp_todos}
-
-    total_tasks = len(tasks)
-    completed_tasks = [completed for completed in tasks.values() if completed]
-    completed_tasks_count = len(completed_tasks)
-
-    print(f"Employee {employee_name} is done with tasks"
-          f"({completed_tasks_count}/{total_tasks}):")
-    for title, completed in tasks.items():
-        if completed:
-            print(f"\t {title}")
+import sys
 
 
 if __name__ == "__main__":
-    if len(argv) > 1:
-        main(argv[1])
-    else:
-        print("Usage: ./0-gather_data_from_an_API.py <employee_id>")
+    #  URL of JSONPlaceholder API
+    url = "https://jsonplaceholder.typicode.com/"
+
+    # Get the employee information using employee ID
+    employee_id = sys.argv[1]
+    user = requests.get(url + "users/{}".format(employee_id)).json()
+
+    # Get the to-do list for the employee using the provided employee ID
+    params = {"userId": employee_id}
+    todos = requests.get(url + "todos", params).json()
+
+    # Filter completed tasks and count them
+    completed = [t.get("title") for t in todos if t.get("completed") is True]
+
+    # Print the employee's name and the number of completed tasks
+    print("Employee {} is done with tasks({}/{}):".format(
+        user.get("name"), len(completed), len(todos)))
+
+    # Print the completed tasks one by one with indentation
+    [print("\t {}".format(complete)) for complete in completed]
