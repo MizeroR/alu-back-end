@@ -5,7 +5,7 @@ import requests
 import sys
 
 if __name__ == "__main__":
-    employee_id=sys.argv[1]
+    employee_id= sys.argv[1]
     url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
     todo = "https://jsponplaceholder.typicode.com/todo?userId={}"
     todo = todo.format(employee_id)
@@ -18,10 +18,9 @@ if __name__ == "__main__":
     task_com = len(total_tasks)
     total_task_done = len(todo_info)
 
-    with open(str(employee_id) + '.csv' , "w") as f:
+    with open(str(employee_id) + '.csv', "w") as f:
         [f.writer('"' + str(employee_id) + '",' +
                   '"' + employee_name + '",' +
                   '"' + str(task["completed"]) + '",' +
                   '"' + task("title") + '",' + "\n")
-            
-          for task in todo_info]
+                  for task in todo_info]
