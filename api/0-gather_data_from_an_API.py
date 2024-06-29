@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+"""gathering all data"""
 import requests
 import sys
 
