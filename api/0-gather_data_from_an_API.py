@@ -3,6 +3,7 @@
 import requests
 import sys
 
+
 if __name__ == "__main__":
     #  URL of JSONPlaceholder API
     url = "https://jsonplaceholder.typicode.com/"

@@ -4,6 +4,7 @@ import json
 import requests
 import sys
 
+
 if __name__ == "__main__":
     # Get the employee ID from the command-line argument
     user_id = sys.argv[1]
