@@ -14,11 +14,11 @@ if __name__ == "__main__":
     todo_info = requests.request("GET", todo).json()
 
     employee_name = user_info.get("name")
-    total_tasks =  list(filter(lambda x:(x["completed"] is True),todo_info))
+    total_tasks =  list(filter(lambda x:(x["completed"] is True), todo_info))
     task_com = len(total_tasks)
     total_task_done = len(todo_info)
 
     
-    print("Employee {} is done with tasks({}/{}):".format(employee_name,task_com,total_task_done))
+    print("Employee {} is done with tasks({}/{}):".format(employee_name, task_com, total_task_done))
     
     [print("\t {}".format(task.get("title"))) for task in total_tasks]
