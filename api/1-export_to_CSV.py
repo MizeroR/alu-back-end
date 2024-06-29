@@ -4,6 +4,7 @@ import csv
 import requests
 import sys
 
+
 if __name__ == "__main__":
     employee_id = sys.argv[1]
     url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
@@ -12,7 +13,7 @@ if __name__ == "__main__":
 
     user_info = requests.request("GET", url).json()
     todo_info = requests.request("GET", todo).json()
-
+    
     employee_name = user_info.get("name")
     total_tasks = list(filter(lambda x: (x["completed"] is True), todo_info))
     task_com = len(total_tasks)
