@@ -14,7 +14,7 @@ if __name__ == "__main__":
     user_info = requests.request("GET", url).json()
     todo_info = requests.request("GET", todo).json()
 
-    employee_username=user_info.get("username")
+    employee_username = user_info.get("username")
 
     todos_info_sorted = [
         dict(zip(["task", "completed", "username"],
