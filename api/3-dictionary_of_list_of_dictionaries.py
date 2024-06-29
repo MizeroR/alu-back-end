@@ -3,39 +3,36 @@
 import json
 import requests
 
-def get_employee_task(employee_id):
-    """Doc"""
-    url = "https://jsonplaceholder.typicode.com/users/{}" \
-        .format(employee_id)
+def fetch_user_data():
+    """Fetch user information and to-do lists for all employees."""
+    # Base URL for the JSONPlaceholder API
+    url = "https://jsonplaceholder.typicode.com/"
 
-    user_info = requests.request('GET', url).json()
-    todos_info = requests.request('GET', todo).json()
+    # Fetch the list of all users (employees)
+    users = requests.get(url + "users").json()
 
-    employee_username = user_info["username"]
-    todo = "https://jsonplaceholder.typicode.com/users/{}/todos"
-    todo = todo.format(employee_id)
-    
-    return [
-        dict(zip(["task", "completed", "username"],
-                 [task["title"], task["completed"], employee_username]))
-        for task in todos_info]
+    # Create a dictionary containing to-do list information of all employees
+    data_to_export = {}
+    for user in users:
+        user_id = user["id"]
+        user_url = url + f"todos?userId={user_id}"
+        todo_list = requests.get(user_url).json()
+
+        data_to_export[user_id] = [
+            {
+                "task": todo.get("title"),
+                "completed": todo.get("completed"),
+                "username": user.get("username"),
+            }
+            for todo in todo_list
+        ]
+
+    return data_to_export
 
 
-def get_employee_ids():
-    """Doc"""
-    user = "https://jsonplaceholder.typicode.com/users/"
+if __name__ == "__main__":
+    data_to_export = fetch_user_data()
 
-    users_info = requests.request('GET', user).json()
-    ids = list(map(lambda user: user["id"], users_info))
-    return ids
-
-
-if __name__ == '__main__':
-
-    employee_id = get_employee_ids()
-
-    with open('todo_all_employees.json', "w") as f:
-        all_users = {}
-        for employee_id in employee_id:
-            all_users[str(employee_id)] = get_employee_task(employee_id)
-        f.write(json.dumps(all_users))
+    # Write the data to a JSON file
+    with open("todo_all_employees.json", "w") as jsonfile:
+        json.dump(data_to_export, jsonfile, indent=4)
