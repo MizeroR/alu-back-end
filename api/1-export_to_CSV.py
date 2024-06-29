@@ -6,22 +6,28 @@ import sys
 
 
 if __name__ == "__main__":
-    employee_id = sys.argv[1]
-    url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
-    todo = "https://jsponplaceholder.typicode.com/todo?userId={}"
-    todo = todo.format(employee_id)
+    # Get the user ID from the command-line arguments provided to the script
+    user_id = sys.argv[1]
 
-    user_info = requests.request("GET", url).json()
-    todo_info = requests.request("GET", todo).json()
-    
-    employee_name = user_info.get("name")
-    total_tasks = list(filter(lambda x: (x["completed"] is True), todo_info))
-    task_com = len(total_tasks)
-    total_task_done = len(todo_info)
+    # Define the base URL for the JSON API
+    url = "https://jsonplaceholder.typicode.com/"
 
-    with open(str(employee_id) + '.csv', "w") as f:
-        [f.writer('"' + str(employee_id) + '",' +
-                  '"' + employee_name + '",' +
-                  '"' + str(task["completed"]) + '",' +
-                  '"' + task("title") + '",' + "\n")
-                for task in todo_info]
+    # Fetch user information from the API and
+    #   convert the response to a JSON object
+    user = requests.get(url + "users/{}".format(user_id)).json()
+
+    # Extract the username from the user data
+    username = user.get("username")
+
+    # Fetch the to-do list items associated with the
+    #   given user ID and convert the response to a JSON object
+    todos = requests.get(url + "todos", params={"userId": user_id}).json()
+
+    # Use list comprehension to iterate over the to-do list items
+    # Write each item's details (user ID, username, completion status,
+    #   and title) as a row in the CSV file
+    with open("{}.csv".format(user_id), "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        [writer.writerow(
+            [user_id, username, t.get("completed"), t.get("title")]
+         ) for t in todos]
